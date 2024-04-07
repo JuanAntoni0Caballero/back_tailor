@@ -9,35 +9,38 @@ const signUp = async (req, res, next) => {
 
     try {
         if (!email || !password || !fullName) {
-            return res.status(400).json({ errorMessages: "Provide email, password and fullName" });
+            return res.status(400).json({ errorMessages: ["Provide email, password and fullName"] });
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
         if (!emailRegex.test(email)) {
-            return res.status(400).json({ errorMessages: "Provide a valid email address." });
+            return res.status(400).json({ errorMessages: ["Provide a valid email address."] });
         }
 
         const passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
         if (!passwordRegex.test(password)) {
             return res.status(400).json({
                 errorMessages:
-                    "Password must have at least 6 characters and contain at least one number, one lowercase and one uppercase letter.",
+                    ["Password must have at least 6 characters and contain at least one number, one lowercase and one uppercase letter."],
             });
         }
 
         const foundUser = await User.findOne({ email });
         if (foundUser) {
-            return res.status(400).json({ errorMessages: "User already exists." });
+            return res.status(400).json({ errorMessages: ["User already exists."] });
         }
 
         const salt = bcrypt.genSaltSync(saltRounds);
         const hashedPassword = bcrypt.hashSync(password, salt);
-
+        console.log(`hashedPassword`, hashedPassword);
+        console.log(`email`, email);
+        console.log(`fullName`, fullName);
         const newUser = await User.create({ email, fullName, password: hashedPassword });
         if (newUser) {
+            console.log(`newUser`, newUser);
             const { _id, email: userEmail, fullName: userfullName } = newUser;
             const user = { _id, email: userEmail, fullName: userfullName };
-            return res.status(201).json(true);
+            return res.status(201).json(user);
         }
 
     } catch (error) {
@@ -50,12 +53,12 @@ const login = async (req, res, next) => {
 
     try {
         if (!email || !password) {
-            return res.status(400).json({ errorMessages: "Provide email and password." });
+            return res.status(400).json({ errorMessages: ["Provide email and password."] });
         }
 
         const foundUser = await User.findOne({ email });
         if (!foundUser) {
-            return res.status(401).json({ errorMessages: "User not found." });
+            return res.status(401).json({ errorMessages: ["User not found."] });
         }
 
         const passwordCorrect = bcrypt.compareSync(password, foundUser.password);
@@ -72,7 +75,7 @@ const login = async (req, res, next) => {
 
             return res.status(200).json(authToken);
         } else {
-            return res.status(401).json({ errorMessages: "Unable to authenticate the user" });
+            return res.status(401).json({ errorMessages: ["Unable to authenticate the user"] });
         }
     } catch (error) {
         return next(error);
