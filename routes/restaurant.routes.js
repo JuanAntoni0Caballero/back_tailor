@@ -2,16 +2,16 @@ const router = require("express").Router();
 
 const {
   createRestaurant,
-  // getOneMarket,
-  // getAllMarkets,
+  getAllRestaurant,
+  getOneRestaurant,
   // editMarket,
   // deleteMarket,
 } = require("../controllers/restaurant.controllers.js");
 
 router.post("/createRestaurant", createRestaurant);
-// router.get("/getOneMarket/:market_id", getOneMarket);
+router.get("/getAllRestaurant", getAllRestaurant);
+router.get("/getOneRestaurant/:restaurant_id", getOneRestaurant);
 // router.put("/editMarket/:market_id", editMarket);
-// router.get("/getMarkets", getAllMarkets);
 // router.delete("/deleteMarket/:market_id", deleteMarket);
 
 module.exports = router;

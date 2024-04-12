@@ -1,4 +1,6 @@
 const Restaurant = require('../models/Restaurant.model');
+const fs = require('fs');
+
 
 const createRestaurant = async (req, res, next) => {
   const { restaurantData } = req.body;
@@ -6,7 +8,6 @@ const createRestaurant = async (req, res, next) => {
   try {
     const newRestaurant = await Restaurant.create(restaurantData);
     if (newRestaurant) {
-      console.log('newRestaurant ==>', newRestaurant)
       res.status(201).json({ newRestaurant });
     }
   } catch (error) {
@@ -16,6 +17,71 @@ const createRestaurant = async (req, res, next) => {
     });
   }
 };
+
+const getAllRestaurant = async (req, res, next) => {
+  try {
+    fs.readFile('api/restaurants.json', 'utf8', (err, data) => {
+      if (err) {
+        console.error('Error al leer el archivo JSON:', err);
+        res.status(500).json({
+          errorMessages: ['Error al leer el archivo JSON.'],
+        });
+        return;
+      }
+      const restaurants = JSON.parse(data);
+      res.status(200).json(restaurants);
+    });
+  } catch (error) {
+    console.error('Error al recuperar los datos de los restaurants:', error);
+    res.status(500).json({
+      errorMessages: ['Error desconocido durante la recuperación de restaurants.'],
+    });
+  }
+};
+
+const getOneRestaurant = async (req, res, next) => {
+  const { restaurant_id } = req.params;
+  try {
+    fs.readFile('api/restaurants.json', 'utf8', (err, data) => {
+      if (err) {
+        console.error('Error al leer el archivo JSON:', err);
+        res.status(500).json({
+          errorMessages: ['Error al leer el archivo JSON.'],
+        });
+        return;
+      }
+      const restaurants = JSON.parse(data);
+      const restaurant = restaurants.find(restaurant => restaurant.id == restaurant_id);
+      if (restaurant) {
+        res.status(200).json({ restaurant });
+      } else {
+        res.status(404).json({
+          errorMessages: ['Restaurante no encontrado.'],
+        });
+      }
+    });
+  } catch (error) {
+    console.error('Error al recuperar el restaurant', error);
+    res.status(500).json({
+      errorMessages: ['Error desconocido durante la recuperación del restaurant.'],
+    });
+  }
+};
+
+// const getAllRestaurant = async (req, res, next) => {
+//   try {
+//     const restaurants = await Restaurant.find();
+//     if (!restaurants) {
+//       console.error("Error al recuperar los datos de los restaurants:", error);
+//     }
+//     res.status(201).json(restaurants);
+//   } catch (error) {
+//     console.error("Error al recuperar los datos de los restaurants:", error);
+//     res.status(500).json({
+//       errorMessages: ["Error desconocido durante la recuperación de restaurants."],
+//     });
+//   }
+// };
 
 // const editMarket = async (req, res, next) => {
 //   const { market_id } = req.params
@@ -35,33 +101,9 @@ const createRestaurant = async (req, res, next) => {
 //   }
 // };
 
-// const getOneMarket = async (req, res, next) => {
-//   const { market_id } = req.params;
-//   try {
-//     const market = await Market.findById(market_id);
-//     res.status(201).json(market);
-//   } catch (error) {
-//     console.error("Error al recuperar el market", error);
-//     res.status(500).json({
-//       errorMessages: ["Error desconocido durante la recuperación del market."],
-//     });
-//   }
-// };
 
-// const getAllMarkets = async (req, res, next) => {
-//   try {
-//     const markets = await Market.find();
-//     if (!markets) {
-//       console.error("Error al recuperar los datos de los markets:", error);
-//     }
-//     res.status(201).json(markets);
-//   } catch (error) {
-//     console.error("Error al recuperar los datos de los markets:", error);
-//     res.status(500).json({
-//       errorMessages: ["Error desconocido durante la recuperación de markets."],
-//     });
-//   }
-// };
+
+
 
 // const deleteMarket = async (req, res, next) => {
 //   const { market_id } = req.params;
@@ -79,8 +121,8 @@ const createRestaurant = async (req, res, next) => {
 
 module.exports = {
   createRestaurant,
+  getAllRestaurant,
+  getOneRestaurant,
   // editMarket,
-  // getOneMarket,
-  // getAllMarkets,
   // deleteMarket,
 };

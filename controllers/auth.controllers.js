@@ -83,8 +83,6 @@ const login = async (req, res, next) => {
 };
 
 const verify = (req, res, next) => {
-    console.log(`req.payload`, req.payload);
-
     res.status(200).json(req.payload);
 };
 
