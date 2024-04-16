@@ -10,12 +10,11 @@ const restaurantSchema = new Schema(
     description: {
       type: String,
       required: [true, 'Description is required.'],
-      lowercase: true,
       trim: true
     },
-    city: {
+    direction: {
       type: String,
-      required: [true, 'City is required.']
+      required: [true, 'direction is required.']
     }
   },
   {

@@ -32,9 +32,7 @@ const signUp = async (req, res, next) => {
 
         const salt = bcrypt.genSaltSync(saltRounds);
         const hashedPassword = bcrypt.hashSync(password, salt);
-        console.log(`hashedPassword`, hashedPassword);
-        console.log(`email`, email);
-        console.log(`fullName`, fullName);
+
         const newUser = await User.create({ email, fullName, password: hashedPassword });
         if (newUser) {
             console.log(`newUser`, newUser);
@@ -64,9 +62,9 @@ const login = async (req, res, next) => {
         const passwordCorrect = bcrypt.compareSync(password, foundUser.password);
 
         if (passwordCorrect) {
-            const { _id, email: userEmail, fullName: userfullName } = foundUser;
+            const { _id, email: userEmail, fullName: userfullName, favoritedRestaurants } = foundUser;
 
-            const payload = { _id, email: userEmail, fullName: userfullName };
+            const payload = { _id, email: userEmail, fullName: userfullName, favoritedRestaurants };
 
             const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
                 algorithm: "HS256",
