@@ -12,9 +12,9 @@ const createRestaurant = async (req, res, next) => {
       res.status(201).json({ newRestaurant });
     }
   } catch (error) {
-    console.error("Error durante la creación del restaurant:", error);
+    console.error("Error durante la creación del restaurante:", error);
     res.status(500).json({
-      errorMessages: ["Error desconocido durante la creación del restaurant."],
+      errorMessages: ["Error desconocido durante la creación del restaurante."],
     });
   }
 };
@@ -33,9 +33,9 @@ const getAllRestaurant = async (req, res, next) => {
       res.status(200).json(restaurants);
     });
   } catch (error) {
-    console.error('Error al recuperar los datos de los restaurants:', error);
+    console.error('Error al recuperar los datos de los restaurantes:', error);
     res.status(500).json({
-      errorMessages: ['Error desconocido durante la recuperación de restaurants.'],
+      errorMessages: ['Error desconocido durante la recuperación de restaurantes.'],
     });
   }
 };
@@ -64,7 +64,7 @@ const getOneRestaurant = async (req, res, next) => {
   } catch (error) {
     console.error('Error al recuperar el restaurant', error);
     res.status(500).json({
-      errorMessages: ['Error desconocido durante la recuperación del restaurant.'],
+      errorMessages: ['Error desconocido durante la recuperación del restaurante.'],
     });
   }
 };
@@ -97,7 +97,7 @@ const editRestaurant = async (req, res, next) => {
   } catch (error) {
     console.error("Error durante la edición del restaurant:", error);
     res.status(500).json({
-      errorMessages: ["Error desconocido durante la edición del restaurant."],
+      errorMessages: ["Error desconocido durante la edición del restaurante."],
     });
   }
 };
@@ -110,9 +110,9 @@ const deleteRestaurant = async (req, res, next) => {
     await Restaurant.findByIdAndDelete(restaurant_id);
     res.status(201).json({ message: ["restaurant eliminado correctamente"] });
   } catch {
-    console.error("Error al eliminar el restaurant", error);
+    console.error("Error al eliminar el restaurante", error);
     res.status(500).json({
-      errorMessages: ["Error desconocido durante la eliminación del restaurant."],
+      errorMessages: ["Error desconocido durante la eliminación del restaurante."],
     });
   }
 };

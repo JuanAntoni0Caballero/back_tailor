@@ -9,25 +9,25 @@ const signUp = async (req, res, next) => {
 
     try {
         if (!email || !password || !fullName) {
-            return res.status(400).json({ errorMessages: ["Provide email, password and fullName"] });
+            return res.status(400).json({ errorMessages: ["Nombre, email y contraseña requeridos."] });
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
         if (!emailRegex.test(email)) {
-            return res.status(400).json({ errorMessages: ["Provide a valid email address."] });
+            return res.status(400).json({ errorMessages: ["Email no válido."] });
         }
 
         const passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
         if (!passwordRegex.test(password)) {
             return res.status(400).json({
                 errorMessages:
-                    ["Password must have at least 6 characters and contain at least one number, one lowercase and one uppercase letter."],
+                    ["La contraseña debe contener al menos 6 carácteres y contener al menos un número, una minúscula y una mayúscula."],
             });
         }
 
         const foundUser = await User.findOne({ email });
         if (foundUser) {
-            return res.status(400).json({ errorMessages: ["User already exists."] });
+            return res.status(400).json({ errorMessages: ["Usuario ya registrado."] });
         }
 
         const salt = bcrypt.genSaltSync(saltRounds);
@@ -51,12 +51,12 @@ const login = async (req, res, next) => {
 
     try {
         if (!email || !password) {
-            return res.status(400).json({ errorMessages: ["Provide email and password."] });
+            return res.status(400).json({ errorMessages: ["Rellena los campos de email y contraseña."] });
         }
 
         const foundUser = await User.findOne({ email });
         if (!foundUser) {
-            return res.status(401).json({ errorMessages: ["User not found."] });
+            return res.status(401).json({ errorMessages: ["Usuario no encontrado."] });
         }
 
         const passwordCorrect = bcrypt.compareSync(password, foundUser.password);
@@ -73,7 +73,7 @@ const login = async (req, res, next) => {
 
             return res.status(200).json(authToken);
         } else {
-            return res.status(401).json({ errorMessages: ["Unable to authenticate the user"] });
+            return res.status(401).json({ errorMessages: ["Imposible reconocer al usuario."] });
         }
     } catch (error) {
         return next(error);
