@@ -87,19 +87,21 @@ const getOneRestaurant = async (req, res, next) => {
 const editRestaurant = async (req, res, next) => {
   const { restaurant_id } = req.params
   const updateRestaurantData = req.body
-  try {
-    const restaurant = await Restaurant.findByIdAndUpdate(restaurant_id, updateRestaurantData, {
-      new: true
-    });
-    if (restaurant) {
-      res.status(201).json({ restaurant });
-    }
-  } catch (error) {
-    console.error("Error durante la edición del restaurant:", error);
-    res.status(500).json({
-      errorMessages: ["Error desconocido durante la edición del restaurante."],
-    });
-  }
+  //Fake response to edit restaurant
+  res.status(201).json('Restaurante Editado')
+  // try {
+  //   const restaurant = await Restaurant.findByIdAndUpdate(restaurant_id, updateRestaurantData, {
+  //     new: true
+  //   });
+  //   if (restaurant) {
+  //     res.status(201).json({ restaurant });
+  //   }
+  // } catch (error) {
+  //   console.error("Error durante la edición del restaurant:", error);
+  //   res.status(500).json({
+  //     errorMessages: ["Error desconocido durante la edición del restaurante."],
+  //   });
+  // }
 };
 
 
